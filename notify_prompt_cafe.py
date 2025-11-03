@@ -15,7 +15,7 @@ if not SLACK_WEBHOOK_URL:
 
 def main():
     try:
-        r = requests.post(PROMPT_CAFE_ENDPOINT, timeout=15)
+        r = requests.post(PROMPT_CAFE_ENDPOINT, timeout=120)
     except Exception as e:
         requests.post(SLACK_WEBHOOK_URL, json={"text": f"🚨 prompt cafe call failure: {e}"})
         sys.exit(1)
