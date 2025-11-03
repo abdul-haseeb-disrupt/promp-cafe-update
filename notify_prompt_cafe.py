@@ -14,10 +14,14 @@ if not SLACK_WEBHOOK_URL:
     sys.exit(1)
 
 def main():
+    print(f"Calling API: {PROMPT_CAFE_ENDPOINT}")
     try:
         r = requests.post(PROMPT_CAFE_ENDPOINT, timeout=120)
+        print(f"API responded with status: {r.status_code}")
     except Exception as e:
-        requests.post(SLACK_WEBHOOK_URL, json={"text": f"🚨 prompt cafe call failure: {e}"})
+        error_msg = f"🚨 prompt cafe call failure: {e}"
+        print(f"ERROR: {error_msg}")
+        requests.post(SLACK_WEBHOOK_URL, json={"text": error_msg})
         sys.exit(1)
 
     status = r.status_code
@@ -34,8 +38,10 @@ def main():
     else:
         txt = f"Prompt Cafe status: {status}"
 
+    print(f"Sending notification to Slack: Status {status}")
     requests.post(SLACK_WEBHOOK_URL, json={"text": txt})
-    print("done")
+    print("✓ Notification sent to Slack successfully")
+    print("Done!")
 
 if __name__ == "__main__":
     main()
